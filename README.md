@@ -1,0 +1,3 @@
+Lit
+====
+#### Rete.js plugin
