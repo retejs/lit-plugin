@@ -11,7 +11,9 @@ export default <ReteOptions>{
     'rete-area-plugin': 'ReteAreaPlugin',
     'rete-render-utils': 'ReteRenderUtils',
     'lit': 'Lit',
-    'lit/decorators.js': 'LitDecorators'
+    'lit/decorators.js': 'LitDecorators',
+    'lit/directives/repeat.js': 'LitRepeat',
+    'lit/directives/keyed.js': 'LitKeyed'
   },
   babel: {
     plugins: [
@@ -19,7 +21,7 @@ export default <ReteOptions>{
         version: '2023-05'
         // decoratorsBeforeExport: true
         // legacy: true
-      }],
+      }]
       // [classProperties, {
       //   // loose: true
       // }]

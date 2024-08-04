@@ -4,9 +4,10 @@ import { BaseSchemes, CanAssignSignal, Scope } from 'rete'
 
 import { RenderPreset } from './presets/types'
 export type { ClassicScheme, LitArea2D, RenderEmit } from './presets/classic'
-import { html, LitElement, render } from 'lit'
+import { LitElement } from 'lit'
 import { property } from 'lit/decorators.js'
 
+import { getRenderer, Renderer } from './renderer'
 import { Position, RenderSignal } from './types'
 
 export * as Presets from './presets'
@@ -47,9 +48,13 @@ type Requires<Schemes extends BaseSchemes> =
  */
 export class LitPlugin<Schemes extends BaseSchemes, T = Requires<Schemes>> extends Scope<Produces<Schemes>, [Requires<Schemes> | T]> {
   presets: RenderPreset<Schemes, T>[] = []
+  renderer: Renderer
+  owners = new WeakMap<HTMLElement, RenderPreset<Schemes, T>>()
 
   constructor() {
     super('lit')
+
+    this.renderer = getRenderer()
 
     this.addPipe(context => {
       if (!context || typeof context !== 'object' || !('type' in context)) return context
@@ -83,28 +88,40 @@ export class LitPlugin<Schemes extends BaseSchemes, T = Requires<Schemes>> exten
   }
 
   private mount(element: HTMLElement, context: Requires<Schemes>) {
+    const existing = this.renderer.get(element)
     const parent = this.parentScope()
+
+    if (existing) {
+      this.presets.forEach(preset => {
+        if (this.owners.get(element) !== preset) return
+        const result = preset.update(context as any, this)
+
+        if (result) {
+          this.renderer.update(existing, result)
+        }
+      })
+      return true
+    }
 
     for (const preset of this.presets) {
       const result = preset.render(context as any, this)
 
       if (!result) continue
 
-      render(html`
-        <rete-root
-          .rendered=${() => parent.emit({ type: 'rendered', data: context.data } as T)}
-        >
-          ${result}
-        </rete-root>
-      `, element)
+      this.renderer.mount(
+        element,
+        result,
+        () => parent.emit({ type: 'rendered', data: context.data } as T)
+      )
 
+      this.owners.set(element, preset)
       return true
     }
   }
 
   private unmount(element: HTMLElement) {
-    console.log('unmount', element)
-    // element.innerHTML = ''
+    this.owners.delete(element)
+    this.renderer.unmount(element)
   }
 
   /**

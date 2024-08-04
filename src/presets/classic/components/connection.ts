@@ -57,6 +57,18 @@ export class ConnectionElement extends LitElement {
     })
   }
 
+  updated(changed: Map<string, any>): void {
+    if (changed.has('start') && typeof this.start !== 'function') {
+      this.computedStart = this.start
+      this.updatePath()
+    }
+
+    if (changed.has('end') && typeof this.end !== 'function') {
+      this.computedEnd = this.end
+      this.updatePath()
+    }
+  }
+
   disconnectedCallback(): void {
     super.disconnectedCallback()
 
@@ -65,8 +77,9 @@ export class ConnectionElement extends LitElement {
   }
 
   updatePath(): void {
-    if (this.computedStart && this.computedEnd) this.path(this.computedStart, this.computedEnd).then(path => {
-      this.computedPath = path
-    })
+    if (this.computedStart && this.computedEnd) this.path(this.computedStart, this.computedEnd)
+      .then(path => {
+        this.computedPath = path
+      })
   }
 }
