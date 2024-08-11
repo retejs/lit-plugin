@@ -10,19 +10,19 @@ export class Menu extends LitElement {
   @property({ type: Function }) accessor onHide = () => null
 
   @state() accessor filter = ''
-  hide
+  hide: any
 
   static styles = css`
     .menu {
-      padding: 10px
-      width: var(--menu-width)
-      margin-top: -20px
-      margin-left: calc(-1 * var(--menu-width) / 2)
+      padding: 10px;
+      width: var(--menu-width);
+      margin-top: -20px;
+      margin-left: calc(-1 * var(--menu-width) / 2);
     }
   `
 
-  constructor() {
-    super()
+  connectedCallback(): void {
+    super.connectedCallback()
     this.hide = debounce(this.delay, this.onHide)
   }
 
@@ -44,13 +44,20 @@ export class Menu extends LitElement {
 
   handleFilterChange(event: any) {
     this.filter = event.target.value
-    // eslint-disable-next-line no-console
-    console.log(event, this.filter)
     this.requestUpdate()
   }
 
   render() {
     return html`
+      <style>
+        :host {
+          --context-color: rgba(110, 136, 255, 0.8);
+          --context-color-light: rgba(130, 153, 255, 0.8);
+          --context-color-dark: rgba(69, 103, 255, 0.8);
+          --context-menu-round: 5px;
+          --menu-width: 120px;
+        }
+      </style>
       <div class="menu" data-testid="context-menu">
         ${this.searchBar
     ? html`<rete-context-menu-block>
@@ -65,6 +72,7 @@ export class Menu extends LitElement {
             .delay=${this.delay}
             @hide=${this.onHide}
             .subitems=${item.subitems}
+            class="first"
           >
             ${item.label}
           </rete-context-menu-item>

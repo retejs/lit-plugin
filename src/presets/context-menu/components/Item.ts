@@ -2,6 +2,7 @@ import { css, html, LitElement } from 'lit'
 import { property, state } from 'lit/decorators.js'
 
 import { debounce } from '../utils/debounce'
+import { Block } from './Block'
 
 export class Item extends LitElement {
   @property({ type: Array }) accessor subitems: any[] = []
@@ -11,30 +12,34 @@ export class Item extends LitElement {
 
   hide: any
 
-  static styles = css`
-    .block {
-      padding: 0
-    }
-    .content {
-      padding: 4px
-    }
-    .hasSubitems:after {
-      content: '►'
-      position: absolute
-      opacity: 0.6
-      right: 5px
-      top: 5px
-    }
-    .subitems {
-      position: absolute
-      top: 0
-      left: 100%
-      width: var(--width)
-    }
-  `
+  static styles = [
+    Block.styles,
+    css`
+      :host {
+        padding: 0;
+      }
+      .content {
+        padding: 4px;
+      }
+      :host(.hasSubitems):after {
+        content: '►';
+        position: absolute;
+        opacity: 0.6;
+        right: 5px;
+        top: 5px;
+        pointer-events: none;
+      }
+      .subitems {
+        position: absolute;
+        top: 0;
+        left: 100%;
+        width: var(--menu-width);
+      }
+    `
+  ]
 
-  constructor() {
-    super()
+  connectedCallback() {
+    super.connectedCallback()
     this.hide = debounce(this.delay, this.hideSubitems.bind(this))
   }
 
@@ -43,8 +48,13 @@ export class Item extends LitElement {
   }
 
   render() {
+    if (this.subitems?.length) {
+      this.classList.add('hasSubitems')
+    } else {
+      this.classList.remove('hasSubitems')
+    }
     return html`
-      <div class="block ${this.subitems?.length ? 'hasSubitems' : ''}" data-testid="context-menu-item">
+      <div data-testid="context-menu-item">
         <div
           class="content"
           @click="${this.handleClick}"
@@ -59,7 +69,7 @@ export class Item extends LitElement {
                 <div class="subitems">
                   ${this.subitems.map(
     item => html`
-                      <item-component
+                      <rete-context-menu-item
                         .key="${item.key}"
                         .delay="${this.delay}"
                         .subitems="${item.subitems}"
@@ -67,7 +77,7 @@ export class Item extends LitElement {
                         @hide="${this.handleHide}"
                       >
                         ${item.label}
-                      </item-component>
+                      </rete-context-menu-item>
                     `
   )}
                 </div>
@@ -94,7 +104,7 @@ export class Item extends LitElement {
   }
 
   handlePointerLeave() {
-    this.hide()
+    this.hide.call()
   }
 
   handleHide() {

@@ -1,11 +1,11 @@
 /* eslint-disable no-console */
-import { html, ReactiveElement, render } from 'lit'
+import { html, nothing, ReactiveElement, render } from 'lit'
 
 export type Renderer = {
-  get(element: Element): ReactiveElement | undefined
+  get(element: HTMLElement): ReactiveElement | undefined
   mount(element: HTMLElement, slot: any, onRendered: any): void
   update<P extends Record<string, any>>(app: ReactiveElement & P, payload: P): void
-  unmount(element: Element): void
+  unmount(element: HTMLElement): void
 }
 
 export function getRenderer(): Renderer {
@@ -28,6 +28,7 @@ export function getRenderer(): Renderer {
 
       if (!app) throw new Error('no instance found')
 
+      console.log('mounting', element, app)
       instances.set(element, app)
     },
     update(app, payload) {
@@ -40,7 +41,7 @@ export function getRenderer(): Renderer {
       const app = instances.get(element)
 
       if (app) {
-        element.innerHTML = ''
+        render(nothing, element)
         instances.delete(element)
       }
     }

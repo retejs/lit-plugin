@@ -5,7 +5,7 @@ import { css, html, LitElement } from 'lit'
 
 export class Block extends LitElement {
   static styles = css`
-    .block {
+    :host {
       color: #fff;
       padding: 4px;
       border-bottom: 1px solid var(--context-color-dark);
@@ -14,28 +14,27 @@ export class Block extends LitElement {
       box-sizing: border-box;
       width: 100%;
       position: relative;
+      display: block;
     }
 
-    .block:first-child {
+    :host(:first-child) {
       border-top-left-radius: var(--context-menu-round);
       border-top-right-radius: var(--context-menu-round);
     }
 
-    .block:last-child {
+    :host(:last-child) {
       border-bottom-left-radius: var(--context-menu-round);
       border-bottom-right-radius: var(--context-menu-round);
     }
 
-    .block:hover {
+    :host(:hover) {
       background-color: var(--context-color-light);
     }
   `
 
   render() {
     return html`
-      <div class="block">
-        <slot></slot>
-      </div>
+      <slot></slot>
     `
   }
 }
