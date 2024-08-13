@@ -21,3 +21,5 @@ export type LitArea2D<T extends ClassicScheme> =
   | { type: 'unmount', data: { element: HTMLElement } }
 
 export type RenderEmit<T extends ClassicScheme> = (props: LitArea2D<T>) => void
+
+export type ExtractPayload<T extends ClassicScheme, K extends string> = Extract<LitArea2D<T>, { type: 'render', data: { type: K }}>['data']

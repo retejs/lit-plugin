@@ -12,6 +12,7 @@ export default <ReteOptions>{
     'rete-render-utils': 'ReteRenderUtils',
     'lit': 'Lit',
     'lit/decorators.js': 'LitDecorators',
+    'lit/static-html': 'LitStaticHtml',
     'lit/directives/repeat.js': 'LitRepeat',
     'lit/directives/keyed.js': 'LitKeyed'
   },

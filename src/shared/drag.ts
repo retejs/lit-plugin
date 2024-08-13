@@ -15,7 +15,6 @@ export function useDrag(translate: Translate, getPointer: (e: StartEvent) => Pos
 
         previous = current
 
-        console.log('move', current, previous, dx, dy)
         translate(dx, dy)
       }
       function up() {

@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { html } from 'lit'
+import { html, TemplateResult } from 'lit'
 import { Scope } from 'rete'
 import {
   classicConnectionPath, getDOMSocketPosition,
@@ -14,18 +14,16 @@ import { ConnectionElement } from './components/connection'
 import { ControlElement } from './components/control'
 import { NodeElement } from './components/node'
 import { SocketElement } from './components/socket'
-import { ClassicScheme, LitArea2D, RenderEmit } from './types'
+import { ClassicScheme, ExtractPayload, LitArea2D } from './types'
+import { ConnectionWrapperElement } from './components/connection-wrapper'
 
 export type { ClassicScheme, LitArea2D, RenderEmit } from './types'
 
-type ExtractPayload<T, N> = any | T | N
-type AcceptComponent<T, P = any> = any | T | P
-
 type CustomizationProps<Schemes extends ClassicScheme> = {
-  node?: (data: ExtractPayload<Schemes, 'node'>) => AcceptComponent<typeof data['payload'], { emit: RenderEmit<Schemes> }> | null
-  connection?: (data: ExtractPayload<Schemes, 'connection'>) => AcceptComponent<typeof data['payload']> | null
-  socket?: (data: ExtractPayload<Schemes, 'socket'>) => AcceptComponent<typeof data['payload']> | null
-  control?: (data: ExtractPayload<Schemes, 'control'>) => AcceptComponent<typeof data['payload']> | null
+  node?: (data: ExtractPayload<Schemes, 'node'>) => ((props: { emit: any }) => TemplateResult | null)
+  connection?: (data: ExtractPayload<Schemes, 'connection'>) => ((props: { path: string, start: Position, end: Position }) => TemplateResult | null)
+  socket?: (data: ExtractPayload<Schemes, 'socket'>) => (() => TemplateResult | null)
+  control?: (data: ExtractPayload<Schemes, 'control'>) => () => (TemplateResult | null)
 }
 
 type ClassicProps<Schemes extends ClassicScheme, K> = {
@@ -42,8 +40,9 @@ export function setup<Schemes extends ClassicScheme, K extends LitArea2D<Schemes
   const positionWatcher = typeof props?.socketPositionWatcher === 'undefined'
     ? getDOMSocketPosition<Schemes, K>()
     : props?.socketPositionWatcher
-  // const { node, connection, socket, control } = props?.customize || {}
+  const { node, connection, socket, control } = props?.customize || {}
 
+  customElements.define('rete-connection-wrapper', ConnectionWrapperElement)
   customElements.define('rete-connection', ConnectionElement)
   customElements.define('rete-ref', RefElement)
   customElements.define('rete-socket', SocketElement)
@@ -77,14 +76,22 @@ export function setup<Schemes extends ClassicScheme, K extends LitArea2D<Schemes
     render(context, plugin) {
       if (context.data.type === 'node') {
         const parent = plugin.parentScope()
+        const emit = async (data: any) => parent.emit(data) as any
 
-        return html`<rete-node .data=${context.data.payload} .emit=${(data: any) => parent.emit(data)}></rete-node>`
+        return node
+          ? node(context.data)({ emit })
+          : html`<rete-node .data=${context.data.payload} .emit=${emit}></rete-node>`
       }
       if (context.data.type === 'connection') {
         const payload = context.data.payload
         const { sourceOutput, targetInput, source, target } = payload
+        const component = (path: string, start: Position, end: Position) => {
+          return connection
+            ? connection(context.data.payload)({ path, start, end })
+            : html`<rete-connection .path=${path} .start=${start} .end=${end}></rete-connection>`
+        }
 
-        return html`<rete-connection
+        return html`<rete-connection-wrapper
           .start=${context.data.start || ((change: any) => positionWatcher.listen(source, 'output', sourceOutput, change))}
           .end=${context.data.end || ((change: any) => positionWatcher.listen(target, 'input', targetInput, change))}
           .path=${async (start: any, end: any) => {
@@ -107,11 +114,17 @@ export function setup<Schemes extends ClassicScheme, K extends LitArea2D<Schemes
               : classicConnectionPath(points as [Position, Position], curvature)
 
             return path
-  }}></rete-connection>`
+  }}
+  .component=${component}
+  ></rete-connection>`
       } else if (context.data.type === 'socket' as any) {
-        return html`<rete-socket .data=${context.data.payload}></rete-socket>`
+        return socket
+          ? socket(context.data.payload)()
+          : html`<rete-socket .data=${context.data.payload}></rete-socket>`
       } else if (context.data.type === 'control') {
-        return html`<rete-control .data=${context.data.payload}></rete-control>`
+        return control
+          ? control(context.data.payload)()
+          : html`<rete-control .data=${context.data.payload}></rete-control>`
       }
       return null
     }
