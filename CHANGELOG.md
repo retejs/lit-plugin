@@ -1,3 +1,15 @@
+# [2.0.0](https://github.com/retejs/lit-plugin/compare/v1.0.0...v2.0.0) (2024-08-14)
+
+
+### Bug Fixes
+
+* v2 release ([fa3ff5c](https://github.com/retejs/lit-plugin/commit/fa3ff5ca668a69e5b0bbde8905c4343d6930a986))
+
+
+### BREAKING CHANGES
+
+* skip v1
+
 # [2.0.0-beta.1](https://github.com/retejs/lit-plugin/compare/v2.0.0-beta.0...v2.0.0-beta.1) (2024-08-14)
 
 
