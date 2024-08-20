@@ -1,3 +1,10 @@
+## [2.0.3](https://github.com/retejs/lit-plugin/compare/v2.0.2...v2.0.3) (2024-08-20)
+
+
+### Bug Fixes
+
+* mark root element with a fragment attribute ([0f1f171](https://github.com/retejs/lit-plugin/commit/0f1f17182c5cede6a22955f43cc26dbe626ef525))
+
 ## [2.0.2](https://github.com/retejs/lit-plugin/compare/v2.0.1...v2.0.2) (2024-08-20)
 
 
