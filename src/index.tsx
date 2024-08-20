@@ -1,31 +1,13 @@
-/* eslint-disable max-statements */
-/* eslint-disable no-console */
 import { BaseSchemes, CanAssignSignal, Scope } from 'rete'
 
 import { RenderPreset } from './presets/types'
-export type { ClassicScheme, LitArea2D, RenderEmit } from './presets/classic'
-import { LitElement } from 'lit'
-import { property } from 'lit/decorators.js'
-
 import { getRenderer, Renderer } from './renderer'
+import { RootElement } from './root'
 import { Position, RenderSignal } from './types'
 
 export * as Presets from './presets'
+export type { ClassicScheme, LitArea2D, RenderEmit } from './presets/classic'
 export * from './types'
-
-class RootElement extends LitElement {
-  @property({ type: Function }) accessor rendered: any = null
-
-  connectedCallback(): void {
-    super.connectedCallback()
-    this.rendered && this.rendered()
-  }
-
-  createRenderRoot() {
-    return this
-  }
-}
-customElements.define('rete-root', RootElement)
 
 /**
  * Signals that can be emitted by the plugin
@@ -34,7 +16,7 @@ customElements.define('rete-root', RootElement)
 export type Produces<Schemes extends BaseSchemes> =
   | { type: 'connectionpath', data: { payload: Schemes['Connection'], path?: string, points: Position[] } }
 
-type Requires<Schemes extends BaseSchemes> =
+export type Requires<Schemes extends BaseSchemes> =
   | RenderSignal<'node', { payload: Schemes['Node'] }>
   | RenderSignal<'connection', { payload: Schemes['Connection'], start?: Position, end?: Position }>
   | { type: 'unmount', data: { element: HTMLElement } }
@@ -48,13 +30,15 @@ type Requires<Schemes extends BaseSchemes> =
  */
 export class LitPlugin<Schemes extends BaseSchemes, T = Requires<Schemes>> extends Scope<Produces<Schemes>, [Requires<Schemes> | T]> {
   presets: RenderPreset<Schemes, T>[] = []
-  renderer: Renderer
+  renderer: Renderer<Record<string, unknown>>
   owners = new WeakMap<HTMLElement, RenderPreset<Schemes, T>>()
 
   constructor() {
     super('lit')
 
     this.renderer = getRenderer()
+
+    customElements.define('rete-root', RootElement)
 
     this.addPipe(context => {
       if (!context || typeof context !== 'object' || !('type' in context)) return context
@@ -64,7 +48,7 @@ export class LitPlugin<Schemes extends BaseSchemes, T = Requires<Schemes>> exten
         if ('filled' in context.data && context.data.filled) {
           return context
         }
-        if (this.mount(context.data.element, context)) {
+        if (this.mount(context.data.element, context as unknown as Extract<T, { type: 'render' }>)) {
           return {
             ...context,
             data: {
@@ -87,14 +71,14 @@ export class LitPlugin<Schemes extends BaseSchemes, T = Requires<Schemes>> exten
     })
   }
 
-  private mount(element: HTMLElement, context: Requires<Schemes>) {
+  private mount(element: HTMLElement, context: Extract<T, { type: 'render' }>) {
     const existing = this.renderer.get(element)
     const parent = this.parentScope()
 
     if (existing) {
       this.presets.forEach(preset => {
         if (this.owners.get(element) !== preset) return
-        const result = preset.update(context as any, this)
+        const result = preset.update(context, this)
 
         if (result) {
           this.renderer.update(existing, result)
@@ -104,14 +88,16 @@ export class LitPlugin<Schemes extends BaseSchemes, T = Requires<Schemes>> exten
     }
 
     for (const preset of this.presets) {
-      const result = preset.render(context as any, this)
+      const result = preset.render(context, this)
 
       if (!result) continue
+
+      const { data } = context as unknown as Requires<Schemes>
 
       this.renderer.mount(
         element,
         result,
-        () => parent.emit({ type: 'rendered', data: context.data } as T)
+        () => parent.emit({ type: 'rendered', data } as Requires<Schemes>)
       )
 
       this.owners.set(element, preset)

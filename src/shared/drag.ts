@@ -1,21 +1,31 @@
 import { Position } from '../types'
 
-type Translate = (dx: number, dy: number) => void
 type StartEvent = { pageX: number, pageY: number }
 
-export function useDrag(translate: Translate, getPointer: (e: StartEvent) => Position) {
+export type Translate = (dx: number, dy: number) => void
+export type GetPointer = (e: StartEvent) => Position | null
+
+export function useDrag(translate: Translate, getPointer: GetPointer) {
+  const getCurrentPointer = (e: StartEvent) => {
+    const pointer = getPointer(e)
+
+    return pointer ? { ...pointer } : null
+  }
+
   return {
     start(e: StartEvent) {
-      let previous = { ...getPointer(e) }
+      let previous = getCurrentPointer(e)
 
       function move(moveEvent: MouseEvent) {
-        const current = { ...getPointer(moveEvent) }
-        const dx = current.x - previous.x
-        const dy = current.y - previous.y
+        const current = getCurrentPointer(moveEvent)
 
+        if (current && previous) {
+          const dx = current.x - previous.x
+          const dy = current.y - previous.y
+
+          translate(dx, dy)
+        }
         previous = current
-
-        translate(dx, dy)
       }
       function up() {
         window.removeEventListener('pointermove', move)

@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 export type { ClassicScheme, LitArea2D, RenderEmit } from '..'
 import { LitElement } from 'lit'
 import { property } from 'lit/decorators.js'
@@ -11,18 +10,18 @@ export class ConnectionWrapperElement extends LitElement {
   @property() accessor start!: Position | PositionWatcher
   @property() accessor end!: Position | PositionWatcher
   @property() accessor path!: (start: Position, end: Position) => Promise<null | string>
-  @property() accessor component!: any
+  @property() accessor component!: (path: string | null, start: Position | null, end: Position | null) => unknown
 
   render() {
     return this.component(this.computedPath, this.computedStart, this.computedEnd)
   }
 
-  computedStart: any = null
-  computedEnd: any = null
+  computedStart: Position | null = null
+  computedEnd: Position | null = null
   @property({ reflect: false })
   accessor computedPath!: string | null
-  unwatch1: any
-  unwatch2: any
+  unwatch1: false | (() => void) = false
+  unwatch2: false | (() => void) = false
 
   connectedCallback(): void {
     super.connectedCallback()

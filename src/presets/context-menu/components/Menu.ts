@@ -1,16 +1,17 @@
 import { css, html, LitElement } from 'lit'
 import { property, state } from 'lit/decorators.js'
 
+import { Item } from '../types'
 import { debounce } from '../utils/debounce'
 
-export class Menu extends LitElement {
-  @property({ type: Array }) accessor items: any[] = []
+export class MenuElement extends LitElement {
+  @property({ type: Array }) accessor items: Item[] = []
   @property({ type: Number }) accessor delay = 0
   @property({ type: Boolean }) accessor searchBar = false
   @property({ type: Function }) accessor onHide = () => null
 
   @state() accessor filter = ''
-  hide: any
+  hide!: ReturnType<typeof debounce>
 
   static styles = css`
     .menu {
@@ -42,8 +43,8 @@ export class Menu extends LitElement {
     return this.items.filter(item => item.label.match(filterRegexp))
   }
 
-  handleFilterChange(event: any) {
-    this.filter = event.target.value
+  handleFilterChange(event: InputEvent) {
+    this.filter = (event.target as HTMLInputElement).value
     this.requestUpdate()
   }
 

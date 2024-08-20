@@ -2,10 +2,13 @@ import { ConnectionId } from 'rete'
 
 import { RenderSignal } from '../../types'
 
-type Position = {
+export type Position = {
   x: number
   y: number
 }
+
+export type Translate = (id: string, dx: number, dy: number) => void
+
 export type Pin = {
   id: string
   position: Position
