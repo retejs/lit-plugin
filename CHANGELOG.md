@@ -1,3 +1,10 @@
+## [2.0.1](https://github.com/retejs/lit-plugin/compare/v2.0.0...v2.0.1) (2024-08-20)
+
+
+### Bug Fixes
+
+* typings and props ([bee1f27](https://github.com/retejs/lit-plugin/commit/bee1f270ca5a465247ceae97a5b95f5462e27d2e))
+
 # [2.0.0](https://github.com/retejs/lit-plugin/compare/v1.0.0...v2.0.0) (2024-08-14)
 
 
