@@ -1,3 +1,10 @@
+## [2.0.2](https://github.com/retejs/lit-plugin/compare/v2.0.1...v2.0.2) (2024-08-20)
+
+
+### Bug Fixes
+
+* testid attributes ([90568a1](https://github.com/retejs/lit-plugin/commit/90568a1e538750ae32cd22e19f01a914e37c59fc))
+
 ## [2.0.1](https://github.com/retejs/lit-plugin/compare/v2.0.0...v2.0.1) (2024-08-20)
 
 
