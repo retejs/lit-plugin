@@ -1,9 +1,6 @@
 import { css, html, LitElement } from 'lit'
 
-// import { unsafeCSS } from 'lit/directives/unsafe-css.js';
-// import contextVars from '../context-vars.scss'; // Assume context-vars.scss is preprocessed to a JS module
-
-export class Block extends LitElement {
+export class BlockElement extends LitElement {
   static styles = css`
     :host {
       color: #fff;

@@ -1,15 +1,14 @@
-/* eslint-disable no-console */
-import { html, nothing, ReactiveElement, render } from 'lit'
+import { html, nothing, ReactiveElement, render, TemplateResult } from 'lit'
 
-export type Renderer = {
-  get(element: HTMLElement): ReactiveElement | undefined
-  mount(element: HTMLElement, slot: any, onRendered: any): void
-  update<P extends Record<string, any>>(app: ReactiveElement & P, payload: P): void
+export type Renderer<P extends Record<string, any>> = {
+  get(element: HTMLElement): (ReactiveElement & P) | undefined
+  mount(element: HTMLElement, slot: TemplateResult<1 | 2>, onRendered: () => void): void
+  update(app: ReactiveElement & P, payload: P): void
   unmount(element: HTMLElement): void
 }
 
-export function getRenderer(): Renderer {
-  const instances = new Map<Element, ReactiveElement>()
+export function getRenderer<P extends Record<string, any>>(): Renderer<P> {
+  const instances = new Map<Element, ReactiveElement & P>()
 
   return {
     get(element) {
@@ -24,11 +23,10 @@ export function getRenderer(): Renderer {
         </rete-root>
       `, element)
 
-      const app = element.children[0]?.children[0] as ReactiveElement
+      const app = element.children[0]?.children[0] as ReactiveElement & P
 
       if (!app) throw new Error('no instance found')
 
-      console.log('mounting', element, app)
       instances.set(element, app)
     },
     update(app, payload) {

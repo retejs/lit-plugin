@@ -1,16 +1,16 @@
 import { css, html, LitElement } from 'lit'
 import { property } from 'lit/decorators.js'
 
-import { ClassicScheme } from '../types'
+import { ClassicScheme, RenderEmit } from '../types'
 
 type NodeExtraData = { width?: number, height?: number }
 
-export class NodeElement extends LitElement {
+export class NodeElement<S extends ClassicScheme> extends LitElement {
   @property({ type: Number }) accessor width: number | null = null
   @property({ type: Number }) accessor height: number | null = null
   @property({ type: Object }) accessor data!: ClassicScheme['Node'] & NodeExtraData
   @property({ type: Function }) accessor styles: ((props: any) => any) | null = null
-  @property({ type: Function }) accessor emit: ((type: string, payload: any) => void) | null = null
+  @property({ type: Function }) accessor emit: RenderEmit<S> | null = null
 
   static styles = css`
     :host {
@@ -98,7 +98,7 @@ export class NodeElement extends LitElement {
     }
   `
 
-  sortByIndex(entries: any[]) {
+  sortByIndex<T extends [string, undefined | { index?: number }][]>(entries: T) {
     entries.sort((a, b) => {
       const ai = a[1]?.index || 0
       const bi = b[1]?.index || 0
@@ -132,7 +132,7 @@ export class NodeElement extends LitElement {
         ${this.styles && this.styles(this)}
       </style>
       <div class="title">${label}</div>
-      ${outputs.map(([key, output]: any) => output ? html`
+      ${outputs.map(([key, output]) => output ? html`
         <div class="output" key=${key}>
           <div class="output-title">${output?.label}</div>
           <span class="output-socket" data-testid="output-socket">
@@ -142,7 +142,7 @@ export class NodeElement extends LitElement {
             ></rete-ref>
           </span>
         </div>` : null)}
-      ${controls.map(([key, control]: any) => control ? html`
+      ${controls.map(([key, control]) => control ? html`
         <span class="control" data-testid="${'control-'+key}">
           <rete-ref
             .emit=${this.emit}
@@ -150,7 +150,7 @@ export class NodeElement extends LitElement {
           ></rete-ref>
         </span>
         ` : null)}
-      ${inputs.map(([key, input]: any) => input ? html`
+      ${inputs.map(([key, input]) => input ? html`
         <div class="input" key=${key}>
           <span class="input-socket" data-testid="input-socket">
             <rete-ref

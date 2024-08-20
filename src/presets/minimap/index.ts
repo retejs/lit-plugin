@@ -1,3 +1,4 @@
+import { html } from 'lit'
 import { BaseSchemes } from 'rete'
 
 import { RenderPreset } from '../types'
@@ -5,7 +6,6 @@ import { Minimap } from './components/Minimap'
 import { MiniNode } from './components/MiniNode'
 import { MiniViewport } from './components/MiniViewport'
 import { MinimapRender } from './types'
-import { html } from 'lit'
 
 /**
  * Preset for rendering minimap.
@@ -23,7 +23,7 @@ export function setup<Schemes extends BaseSchemes, K extends MinimapRender>(prop
           size: props?.size || 200,
           ratio: context.data.ratio,
           viewport: context.data.viewport,
-          translate: context.data.translate,
+          onTranslate: context.data.translate,
           point: context.data.point
         }
       }
@@ -36,7 +36,7 @@ export function setup<Schemes extends BaseSchemes, K extends MinimapRender>(prop
             .size="${props?.size || 200}"
             .ratio="${context.data.ratio}"
             .viewport="${context.data.viewport}"
-            .translate="${context.data.translate}"
+            .onTranslate="${context.data.translate}"
             .point="${context.data.point}"
         ></rete-minimap>
         `

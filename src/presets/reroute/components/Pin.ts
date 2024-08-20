@@ -1,16 +1,17 @@
 import { css, html, LitElement } from 'lit'
 import { property } from 'lit/decorators.js'
 
-import { useDrag } from '../../../shared/drag'
+import { GetPointer, useDrag } from '../../../shared/drag'
+import { Position } from '../types'
 
 const pinSize = 20
 
 export class Pin extends LitElement {
-  @property({ type: Object }) accessor position: { x: number, y: number } = { x: 0, y: 0 }
+  @property({ type: Object }) accessor position: Position = { x: 0, y: 0 }
   @property({ type: Boolean }) accessor selected = false
-  @property({ type: Function }) accessor getPointer: () => any = () => null
+  @property({ type: Function }) accessor getPointer: GetPointer = () => null
 
-  private drag: any = null
+  private drag: null | ReturnType<typeof useDrag> = null
 
   connectedCallback(): void {
     super.connectedCallback()
@@ -55,7 +56,7 @@ export class Pin extends LitElement {
   private onPointerDown(event: PointerEvent) {
     event.stopPropagation()
     event.preventDefault()
-    this.drag.start(event)
+    this.drag?.start(event)
     this.dispatchEvent(new CustomEvent('down', { detail: event }))
   }
 

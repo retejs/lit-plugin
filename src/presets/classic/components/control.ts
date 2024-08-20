@@ -1,8 +1,9 @@
 import { css, html, LitElement } from 'lit'
 import { property } from 'lit/decorators.js'
+import { ClassicPreset } from 'rete'
 
-export class ControlElement extends LitElement {
-  @property({ type: Object }) accessor data: any = {}
+export class ControlElement<N extends 'text' | 'number'> extends LitElement {
+  @property({ type: Object }) accessor data: ClassicPreset.InputControl<N> | null = null
 
   static styles = css`
     input {
@@ -16,13 +17,18 @@ export class ControlElement extends LitElement {
     }
   `
 
-  handleInput(e: any) {
-    const val = this.data.type === 'number' ? +e.target.value : e.target.value
+  handleInput(e: InputEvent) {
+    if (!this.data) return
 
-    this.data.setValue(val)
+    const target = e.target as HTMLInputElement
+    const val = this.data.type === 'number' ? +target.value : target.value
+
+    this.data.setValue(val as typeof this.data['value'])
   }
 
   render() {
+    if (!this.data) return html``
+
     return html`
       <input
         type="${this.data.type}"

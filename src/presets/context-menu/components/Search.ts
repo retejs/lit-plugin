@@ -1,7 +1,7 @@
 import { css, html, LitElement } from 'lit'
 import { state } from 'lit/decorators.js'
 
-export class Search extends LitElement {
+export class SearchElement extends LitElement {
   static properties = {
     text: { type: String }
   }
@@ -26,8 +26,8 @@ export class Search extends LitElement {
      this.text = ''
    }
 
-   handleInput(event: any) {
-     this.text = event.target.value
+   handleInput(event: InputEvent) {
+     this.text = (event.target as HTMLInputElement).value
      const newEvent = new InputEvent('change')
 
      Object.defineProperty(newEvent, 'target', { writable: false, value: event.target })

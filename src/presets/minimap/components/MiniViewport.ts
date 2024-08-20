@@ -2,6 +2,7 @@ import { css, html, LitElement } from 'lit'
 import { property } from 'lit/decorators.js'
 
 import { useDrag } from '../../../shared/drag'
+import { Translate } from '../types'
 import { px, styleMap } from '../utils'
 
 export class MiniViewport extends LitElement {
@@ -10,7 +11,7 @@ export class MiniViewport extends LitElement {
   @property({ type: Number }) accessor width = 0
   @property({ type: Number }) accessor height = 0
   @property({ type: Number }) accessor containerWidth = 0
-  @property({ type: Function }) accessor translate: any = () => null
+  @property({ type: Function }) accessor onTranslate: Translate = () => null
 
   private drag = useDrag(this.onDrag.bind(this), e => ({ x: e.pageX, y: e.pageY }))
 
@@ -23,7 +24,7 @@ export class MiniViewport extends LitElement {
   }
 
   private onDrag(dx: number, dy: number): void {
-    this.translate(this.invert(-dx), this.invert(-dy))
+    this.onTranslate(this.invert(-dx), this.invert(-dy))
   }
 
   private get styles() {

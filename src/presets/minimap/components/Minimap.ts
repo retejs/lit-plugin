@@ -1,17 +1,19 @@
-import { px } from '../utils.js'
 import './MiniNode.js'
 import './MiniViewport.js'
 
 import { css, html, LitElement } from 'lit'
 import { property, query } from 'lit/decorators.js'
 
+import { Rect, Translate } from '../types'
+import { px } from '../utils.js'
+
 export class Minimap extends LitElement {
   @property({ type: Number }) accessor size = 0
   @property({ type: Number }) accessor ratio = 1
-  @property({ type: Array }) accessor nodes: any[] = []
-  @property({ type: Object }) accessor viewport: any = {}
-  @property({ type: Function }) accessor translate!: any
-  @property({ type: Function }) accessor point!: any
+  @property({ type: Array }) accessor nodes: Rect[] = []
+  @property({ type: Object }) accessor viewport!: Rect
+  @property({ type: Function }) accessor onTranslate!: Translate
+  @property({ type: Function }) accessor point!: (x: number, y: number) => void
 
   @query('.minimap') accessor container!: HTMLElement
 
@@ -47,14 +49,14 @@ export class Minimap extends LitElement {
             key="${index}_${node.left}"
           ></rete-mini-node>`
   )}
-        <rete-mini-viewport
-          .left="${this.viewport.left}"
-          .top="${this.viewport.top}"
-          .width="${this.viewport.width}"
-          .height="${this.viewport.height}"
-          .containerWidth="${this.container ? this.container.clientWidth : 0}"
-          .translate="${this.translate}"
-        ></rete-mini-viewport>
+      <rete-mini-viewport
+        .left="${this.viewport.left}"
+        .top="${this.viewport.top}"
+        .width="${this.viewport.width}"
+        .height="${this.viewport.height}"
+        .containerWidth="${this.container ? this.container.clientWidth : 0}"
+        .onTranslate="${this.onTranslate}"
+      ></rete-mini-viewport>
       </div>
     `
   }

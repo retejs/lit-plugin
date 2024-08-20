@@ -2,10 +2,10 @@ import { html } from 'lit'
 import { BaseSchemes } from 'rete'
 
 import { RenderPreset } from '../types'
-import { Block } from './components/Block'
-import { Item } from './components/Item'
-import { Menu } from './components/Menu'
-import { Search } from './components/Search'
+import { BlockElement } from './components/Block'
+import { ItemElement } from './components/Item'
+import { MenuElement } from './components/Menu'
+import { SearchElement } from './components/Search'
 import { ContextMenuRender } from './types'
 
 /**
@@ -14,10 +14,10 @@ import { ContextMenuRender } from './types'
 export function setup<Schemes extends BaseSchemes, K extends ContextMenuRender>(props?: { delay?: number }): RenderPreset<Schemes, K> {
   const delay = typeof props?.delay === 'undefined' ? 1000 : props.delay
 
-  customElements.define('rete-context-menu', Menu)
-  customElements.define('rete-context-menu-block', Block)
-  customElements.define('rete-context-menu-search', Search)
-  customElements.define('rete-context-menu-item', Item)
+  customElements.define('rete-context-menu', MenuElement)
+  customElements.define('rete-context-menu-block', BlockElement)
+  customElements.define('rete-context-menu-search', SearchElement)
+  customElements.define('rete-context-menu-item', ItemElement)
 
   return {
     update(context) {
@@ -33,7 +33,7 @@ export function setup<Schemes extends BaseSchemes, K extends ContextMenuRender>(
     render(context) {
       if (context.data.type === 'contextmenu') {
         return html`
-            <rete-context-menu 
+            <rete-context-menu
                 .items="${context.data.items}"
                 .delay="${delay}"
                 .searchBar="${context.data.searchBar}"

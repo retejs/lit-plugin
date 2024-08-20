@@ -37,9 +37,9 @@ export function setup<Schemes extends BaseSchemes, K extends PinsRender>(props?:
 
         return html`
           <rete-pins
-            .menu="${props?.contextMenu || (() => null)}"
-            .translate="${props?.translate || (() => null)}"
-            .down="${props?.pointerdown || (() => null)}"
+            .onMenu="${props?.contextMenu || (() => null)}"
+            .onTranslate="${props?.translate || (() => null)}"
+            .onDown="${props?.pointerdown || (() => null)}"
             .getPointer="${() => area.area.pointer}"
             .pins="${context.data.data.pins}"
           ></rete-pins>`

@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { html, TemplateResult } from 'lit'
 import { Scope } from 'rete'
 import {
@@ -7,24 +5,30 @@ import {
   loopConnectionPath, SocketPositionWatcher
 } from 'rete-render-utils'
 
+import { Requires } from '../..'
 import { RefElement } from '../../ref'
 import { Position } from '../../types'
 import { RenderPreset } from '../types'
 import { ConnectionElement } from './components/connection'
+import { ConnectionWrapperElement } from './components/connection-wrapper'
 import { ControlElement } from './components/control'
 import { NodeElement } from './components/node'
 import { SocketElement } from './components/socket'
-import { ClassicScheme, ExtractPayload, LitArea2D } from './types'
-import { ConnectionWrapperElement } from './components/connection-wrapper'
+import { ClassicScheme, ExtractPayload, LitArea2D, RenderEmit } from './types'
 
 export type { ClassicScheme, LitArea2D, RenderEmit } from './types'
 
 type CustomizationProps<Schemes extends ClassicScheme> = {
-  node?: (data: ExtractPayload<Schemes, 'node'>) => ((props: { emit: any }) => TemplateResult | null)
-  connection?: (data: ExtractPayload<Schemes, 'connection'>) => ((props: { path: string, start: Position, end: Position }) => TemplateResult | null)
+  node?: (data: ExtractPayload<Schemes, 'node'>) => ((props: { emit: RenderEmit<Schemes> }) => TemplateResult | null)
+  connection?: (data: ExtractPayload<Schemes, 'connection'>) => ((props: {
+    path: string
+    start: Position
+    end: Position
+  }) => TemplateResult | null)
   socket?: (data: ExtractPayload<Schemes, 'socket'>) => (() => TemplateResult | null)
   control?: (data: ExtractPayload<Schemes, 'control'>) => () => (TemplateResult | null)
 }
+type OnChange = (data: Position) => void
 
 type ClassicProps<Schemes extends ClassicScheme, K> = {
   socketPositionWatcher?: SocketPositionWatcher<Scope<never, [K]>>
@@ -73,28 +77,30 @@ export function setup<Schemes extends ClassicScheme, K extends LitArea2D<Schemes
       }
       return { data: payload }
     },
+    // eslint-disable-next-line max-statements
     render(context, plugin) {
       if (context.data.type === 'node') {
         const parent = plugin.parentScope()
-        const emit = async (data: any) => parent.emit(data) as any
+        const emit: RenderEmit<Schemes> = async (data) => parent.emit(data as K | Requires<Schemes>)
 
         return node
           ? node(context.data)({ emit })
           : html`<rete-node .data=${context.data.payload} .emit=${emit}></rete-node>`
       }
       if (context.data.type === 'connection') {
-        const payload = context.data.payload
+        const data = context.data
+        const payload = data.payload
         const { sourceOutput, targetInput, source, target } = payload
         const component = (path: string, start: Position, end: Position) => {
           return connection
-            ? connection(context.data.payload)({ path, start, end })
+            ? connection(data)({ path, start, end })
             : html`<rete-connection .path=${path} .start=${start} .end=${end}></rete-connection>`
         }
 
         return html`<rete-connection-wrapper
-          .start=${context.data.start || ((change: any) => positionWatcher.listen(source, 'output', sourceOutput, change))}
-          .end=${context.data.end || ((change: any) => positionWatcher.listen(target, 'input', targetInput, change))}
-          .path=${async (start: any, end: any) => {
+          .start=${context.data.start || ((change: OnChange) => positionWatcher.listen(source, 'output', sourceOutput, change))}
+          .end=${context.data.end || ((change: OnChange) => positionWatcher.listen(target, 'input', targetInput, change))}
+          .path=${async (start: Position, end: Position) => {
             type FixImplicitAny = typeof plugin.__scope.produces | undefined
             const response: FixImplicitAny = await plugin.emit({
               type: 'connectionpath', data: {
@@ -117,13 +123,13 @@ export function setup<Schemes extends ClassicScheme, K extends LitArea2D<Schemes
   }}
   .component=${component}
   ></rete-connection>`
-      } else if (context.data.type === 'socket' as any) {
+      } else if (context.data.type === 'socket') {
         return socket
-          ? socket(context.data.payload)()
+          ? socket(context.data)()
           : html`<rete-socket .data=${context.data.payload}></rete-socket>`
       } else if (context.data.type === 'control') {
         return control
-          ? control(context.data.payload)()
+          ? control(context.data)()
           : html`<rete-control .data=${context.data.payload}></rete-control>`
       }
       return null

@@ -1,19 +1,20 @@
 import { css, html, LitElement } from 'lit'
 import { property, state } from 'lit/decorators.js'
 
+import { Item } from '../types'
 import { debounce } from '../utils/debounce'
-import { Block } from './Block'
+import { BlockElement } from './Block'
 
-export class Item extends LitElement {
-  @property({ type: Array }) accessor subitems: any[] = []
+export class ItemElement extends LitElement {
+  @property({ type: Array }) accessor subitems: Item['subitems'] = []
   @property({ type: Number }) accessor delay = 0
 
   @state() accessor visibleSubitems = false
 
-  hide: any
+  hide!: ReturnType<typeof debounce>
 
   static styles = [
-    Block.styles,
+    BlockElement.styles,
     css`
       :host {
         padding: 0;
@@ -88,13 +89,13 @@ export class Item extends LitElement {
     `
   }
 
-  handleClick(event: any) {
+  handleClick(event: InputEvent) {
     event.stopPropagation()
     this.dispatchEvent(new CustomEvent('select', { detail: event }))
     this.dispatchEvent(new CustomEvent('hide'))
   }
 
-  stopEvent(event: any) {
+  stopEvent(event: InputEvent) {
     event.stopPropagation()
   }
 

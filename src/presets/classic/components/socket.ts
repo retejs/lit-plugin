@@ -1,8 +1,9 @@
 import { css, html, LitElement } from 'lit'
 import { property } from 'lit/decorators.js'
+import { ClassicPreset } from 'rete'
 
-export class SocketElement extends LitElement {
-  @property({ type: Object }) accessor data: any
+export class SocketElement<T extends ClassicPreset.Socket> extends LitElement {
+  @property({ type: Object }) accessor data: T | null = null
 
   static styles = css`
     :host {
