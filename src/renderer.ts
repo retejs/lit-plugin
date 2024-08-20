@@ -17,6 +17,7 @@ export function getRenderer<P extends Record<string, any>>(): Renderer<P> {
     mount(element, slot, onRendered) {
       render(html`
         <rete-root
+          fragment
           .rendered=${onRendered}
         >
           ${slot}
