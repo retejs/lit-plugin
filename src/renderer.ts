@@ -2,7 +2,7 @@ import { html, nothing, ReactiveElement, render, TemplateResult } from 'lit'
 
 export type Renderer<P extends Record<string, any>> = {
   get(element: HTMLElement): (ReactiveElement & P) | undefined
-  mount(element: HTMLElement, slot: TemplateResult<1 | 2>, onRendered: () => void): void
+  mount(element: HTMLElement, slot: TemplateResult<1 | 2 | 3>, onRendered: () => void): void
   update(app: ReactiveElement & P, payload: P): void
   unmount(element: HTMLElement): void
 }
