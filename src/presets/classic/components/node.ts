@@ -123,6 +123,8 @@ export class NodeElement<S extends ClassicScheme> extends LitElement {
       this.classList.remove('selected')
     }
 
+    this.dataset.testid = 'node'
+
     return html`
       <style>
         :host {
@@ -131,10 +133,10 @@ export class NodeElement<S extends ClassicScheme> extends LitElement {
         }
         ${this.styles && this.styles(this)}
       </style>
-      <div class="title">${label}</div>
+      <div class="title" data-testid="title">${label}</div>
       ${outputs.map(([key, output]) => output ? html`
-        <div class="output" key=${key}>
-          <div class="output-title">${output?.label}</div>
+        <div class="output" key=${key} data-testid=${`output-${key}`}>
+          <div class="output-title" data-testid="output-title">${output?.label}</div>
           <span class="output-socket" data-testid="output-socket">
             <rete-ref
               .data=${{ type: 'socket', side: 'output', key, nodeId: id, payload: output.socket }}
@@ -151,7 +153,7 @@ export class NodeElement<S extends ClassicScheme> extends LitElement {
         </span>
         ` : null)}
       ${inputs.map(([key, input]) => input ? html`
-        <div class="input" key=${key}>
+        <div class="input" key=${key} data-testid=${`input-${key}`}>
           <span class="input-socket" data-testid="input-socket">
             <rete-ref
               .data=${{ type: 'socket', side: 'input', key, nodeId: id, payload: input.socket }}
@@ -159,7 +161,7 @@ export class NodeElement<S extends ClassicScheme> extends LitElement {
             ></rete-ref>
           </span>
           ${input && (!input.control || !input.showControl) ? html`
-            <div class="input-title">${input?.label}</div>` : null}
+            <div class="input-title" data-testid="input-title">${input?.label}</div>` : null}
           ${input?.control && input?.showControl ? html`
             <span class="control" data-testid="input-control">
               <rete-ref
