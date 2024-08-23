@@ -136,8 +136,8 @@ export class NodeElement<S extends ClassicScheme> extends LitElement {
       <div class="title" data-testid="title">${label}</div>
       ${outputs.map(([key, output]) => output ? html`
         <div class="output" key=${key} data-testid=${`output-${key}`}>
-          <div class="output-title" data-testid="output-title">${output?.label}</div>
-          <span class="output-socket" data-testid="output-socket">
+          <div class="output-title" data-testid="output-title">${output?.label}</div><!--
+          --><span class="output-socket" data-testid="output-socket">
             <rete-ref
               .data=${{ type: 'socket', side: 'output', key, nodeId: id, payload: output.socket }}
               .emit=${this.emit}
@@ -159,9 +159,9 @@ export class NodeElement<S extends ClassicScheme> extends LitElement {
               .data=${{ type: 'socket', side: 'input', key, nodeId: id, payload: input.socket }}
               .emit=${this.emit}
             ></rete-ref>
-          </span>
-          ${input && (!input.control || !input.showControl) ? html`
-            <div class="input-title" data-testid="input-title">${input?.label}</div>` : null}
+          </span><!--
+          -->${input && (!input.control || !input.showControl) ? html`<!--
+          --><div class="input-title" data-testid="input-title">${input?.label}</div>` : null}
           ${input?.control && input?.showControl ? html`
             <span class="control" data-testid="input-control">
               <rete-ref
