@@ -1,3 +1,10 @@
+## [2.0.4](https://github.com/retejs/lit-plugin/compare/v2.0.3...v2.0.4) (2024-08-23)
+
+
+### Bug Fixes
+
+* extra whitespaces between input/output title and socket ([2914acc](https://github.com/retejs/lit-plugin/commit/2914acc3c1e0681d2eca9929d4de89a2761739f9))
+
 ## [2.0.3](https://github.com/retejs/lit-plugin/compare/v2.0.2...v2.0.3) (2024-08-20)
 
 
