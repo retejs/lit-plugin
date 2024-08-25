@@ -1,3 +1,10 @@
+## [2.0.5](https://github.com/retejs/lit-plugin/compare/v2.0.4...v2.0.5) (2024-08-25)
+
+
+### Bug Fixes
+
+* prevent zoom on minimap double click ([1cfa8bc](https://github.com/retejs/lit-plugin/commit/1cfa8bc735f608d013f3e9b14e4d777cfc69ab64))
+
 ## [2.0.4](https://github.com/retejs/lit-plugin/compare/v2.0.3...v2.0.4) (2024-08-23)
 
 
