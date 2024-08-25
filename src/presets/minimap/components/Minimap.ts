@@ -71,6 +71,7 @@ export class Minimap extends LitElement {
   }
 
   dblclick(event: MouseEvent) {
+    this.preventDefault(event)
     if (!this.container) return
     const box = this.container.getBoundingClientRect()
     const x = (event.clientX - box.left) / (this.size * this.ratio)
