@@ -5,7 +5,7 @@ import { GetPointer } from '../../../shared/drag'
 import { Position } from '../types'
 
 export class Pins extends LitElement {
-  @property({ type: Array }) accessor pins: Array<{ id: string, position: Position, selected: boolean }> = []
+  @property({ type: Array }) accessor pins: { id: string, position: Position, selected: boolean }[] = []
   @property({ type: Function }) accessor onMenu: (id: string) => void = () => null
   @property({ type: Function }) accessor onTranslate: ((id: string, dx: number, dy: number) => void) = () => null
   @property({ type: Function }) accessor onDown: (id: string) => void = () => null
@@ -25,9 +25,15 @@ export class Pins extends LitElement {
             .position=${pin.position}
             .selected=${pin.selected}
             .getPointer=${this.getPointer}
-            @menu=${() => this.onMenu(pin.id)}
-            @translate=${(e: CustomEvent) => this.onTranslate(pin.id, e.detail.dx, e.detail.dy)}
-            @down=${() => this.onDown(pin.id)}
+            @menu=${() => {
+    this.onMenu(pin.id)
+  }}
+            @translate=${(e: CustomEvent) => {
+    this.onTranslate(pin.id, e.detail.dx, e.detail.dy)
+  }}
+            @down=${() => {
+    this.onDown(pin.id)
+  }}
           ></rete-pin>
         `)}
       </div>

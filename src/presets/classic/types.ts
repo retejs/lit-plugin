@@ -2,7 +2,7 @@ import { ClassicPreset as Classic, GetSchemes, NodeId } from 'rete'
 
 import { Position, RenderSignal } from '../../types'
 
-type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends ((k: infer I)=> void)
+type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends ((k: infer I) => void)
   ? I
   : never
 export type GetControls<
@@ -35,4 +35,4 @@ export type LitArea2D<T extends ClassicScheme> =
 
 export type RenderEmit<T extends ClassicScheme> = (props: LitArea2D<T>) => void
 
-export type ExtractPayload<T extends ClassicScheme, K extends string> = Extract<LitArea2D<T>, { type: 'render', data: { type: K }}>['data']
+export type ExtractPayload<T extends ClassicScheme, K extends string> = Extract<LitArea2D<T>, { type: 'render', data: { type: K } }>['data']

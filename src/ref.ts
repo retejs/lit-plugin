@@ -8,10 +8,11 @@ export class RefElement extends MovableElement {
   @property({ type: Function }) accessor emit!: (props: LitArea2D<ClassicScheme>) => void
 
   mounted() {
-    this.emit({ type: 'render', data: {
-      ...this.data,
-      element: this
-    } })
+    this.emit({ type: 'render',
+      data: {
+        ...this.data,
+        element: this
+      } })
   }
 
   unmounted() {

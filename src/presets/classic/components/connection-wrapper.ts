@@ -51,12 +51,16 @@ export class ConnectionWrapperElement extends LitElement {
   disconnectedCallback(): void {
     super.disconnectedCallback()
 
-    this.unwatch1 && this.unwatch1()
-    this.unwatch2 && this.unwatch2()
+    if (this.unwatch1) {
+      this.unwatch1()
+    }
+    if (this.unwatch2) {
+      this.unwatch2()
+    }
   }
 
   updatePath(): void {
-    if (this.computedStart && this.computedEnd) this.path(this.computedStart, this.computedEnd)
+    if (this.computedStart && this.computedEnd) void this.path(this.computedStart, this.computedEnd)
       .then(path => {
         this.computedPath = path
       })

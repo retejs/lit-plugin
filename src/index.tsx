@@ -97,7 +97,7 @@ export class LitPlugin<Schemes extends BaseSchemes, T = Requires<Schemes>> exten
       this.renderer.mount(
         element,
         result,
-        () => parent.emit({ type: 'rendered', data } as Requires<Schemes>)
+        () => void parent.emit({ type: 'rendered', data } as Requires<Schemes>)
       )
 
       this.owners.set(element, preset)

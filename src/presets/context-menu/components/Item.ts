@@ -68,8 +68,7 @@ export class ItemElement extends LitElement {
           ${this.subitems && this.visibleSubitems
     ? html`
                 <div class="subitems">
-                  ${this.subitems.map(
-    item => html`
+                  ${this.subitems.map(item => html`
                       <rete-context-menu-item
                         .key="${item.key}"
                         .delay="${this.delay}"
@@ -79,8 +78,7 @@ export class ItemElement extends LitElement {
                       >
                         ${item.label}
                       </rete-context-menu-item>
-                    `
-  )}
+                    `)}
                 </div>
               `
     : ''}

@@ -6,7 +6,7 @@ export class RootElement extends LitElement {
 
   connectedCallback(): void {
     super.connectedCallback()
-    this.rendered && this.rendered()
+    this.rendered?.()
   }
 
   createRenderRoot() {

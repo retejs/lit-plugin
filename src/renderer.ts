@@ -24,7 +24,7 @@ export function getRenderer<P extends Record<string, any>>(): Renderer<P> {
         </rete-root>
       `, element)
 
-      const app = element.children[0]?.children[0] as ReactiveElement & P
+      const app = element.children[0].children[0] as ReactiveElement & P
 
       if (!app) throw new Error('no instance found')
 

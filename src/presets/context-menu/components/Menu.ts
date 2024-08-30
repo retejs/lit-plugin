@@ -28,8 +28,12 @@ export class MenuElement extends LitElement {
   }
 
   firstUpdated() {
-    this.addEventListener('mouseover', () => this.hide.cancel())
-    this.addEventListener('mouseleave', () => this.hide.call())
+    this.addEventListener('mouseover', () => {
+      this.hide.cancel()
+    })
+    this.addEventListener('mouseleave', () => {
+      this.hide.call()
+    })
   }
 
   disconnectedCallback() {
