@@ -1,3 +1,10 @@
+## [2.0.6](https://github.com/retejs/lit-plugin/compare/v2.0.5...v2.0.6) (2024-08-30)
+
+
+### Bug Fixes
+
+* update cli and fix linting errors ([9fe8081](https://github.com/retejs/lit-plugin/commit/9fe8081d7b13d1a683c4228062f973b18894f1dc))
+
 ## [2.0.5](https://github.com/retejs/lit-plugin/compare/v2.0.4...v2.0.5) (2024-08-25)
 
 
