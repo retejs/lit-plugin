@@ -128,31 +128,40 @@ export class NodeElement<S extends ClassicScheme> extends LitElement {
     return html`
       <style>
         :host {
-          width: ${Number.isFinite(width) ? `${width}px` : 'var(--node-width)'};
-          height: ${Number.isFinite(height) ? `${height}px` : 'auto'};
+          width: ${Number.isFinite(width)
+    ? `${width}px`
+    : 'var(--node-width)'};
+          height: ${Number.isFinite(height)
+    ? `${height}px`
+    : 'auto'};
         }
-        ${this.styles && this.styles(this)}
+        ${this.styles?.(this)}
       </style>
       <div class="title" data-testid="title">${label}</div>
-      ${outputs.map(([key, output]) => output ? html`
+      ${outputs.map(([key, output]) => output
+    ? html`
         <div class="output" key=${key} data-testid=${`output-${key}`}>
-          <div class="output-title" data-testid="output-title">${output?.label}</div><!--
+          <div class="output-title" data-testid="output-title">${output.label}</div><!--
           --><span class="output-socket" data-testid="output-socket">
             <rete-ref
               .data=${{ type: 'socket', side: 'output', key, nodeId: id, payload: output.socket }}
               .emit=${this.emit}
             ></rete-ref>
           </span>
-        </div>` : null)}
-      ${controls.map(([key, control]) => control ? html`
-        <span class="control" data-testid="${'control-'+key}">
+        </div>`
+    : null)}
+      ${controls.map(([key, control]) => control
+    ? html`
+        <span class="control" data-testid="${'control-' + key}">
           <rete-ref
             .emit=${this.emit}
             .data="${{ type: 'control', payload: control }}"
           ></rete-ref>
         </span>
-        ` : null)}
-      ${inputs.map(([key, input]) => input ? html`
+        `
+    : null)}
+      ${inputs.map(([key, input]) => input
+    ? html`
         <div class="input" key=${key} data-testid=${`input-${key}`}>
           <span class="input-socket" data-testid="input-socket">
             <rete-ref
@@ -160,17 +169,22 @@ export class NodeElement<S extends ClassicScheme> extends LitElement {
               .emit=${this.emit}
             ></rete-ref>
           </span><!--
-          -->${input && (!input.control || !input.showControl) ? html`<!--
-          --><div class="input-title" data-testid="input-title">${input?.label}</div>` : null}
-          ${input?.control && input?.showControl ? html`
+          -->${input && (!input.control || !input.showControl)
+    ? html`<!--
+          --><div class="input-title" data-testid="input-title">${input.label}</div>`
+    : null}
+          ${input.control && input.showControl
+    ? html`
             <span class="control" data-testid="input-control">
               <rete-ref
                 .emit=${this.emit}
                 .data="${{ type: 'control', payload: input.control }}"
               ></rete-ref>
             </span>
-          ` : null}
-        </div>` : null)}
+          `
+    : null}
+        </div>`
+    : null)}
     `
   }
 }

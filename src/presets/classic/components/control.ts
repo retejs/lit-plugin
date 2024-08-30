@@ -21,7 +21,9 @@ export class ControlElement<N extends 'text' | 'number'> extends LitElement {
     if (!this.data) return
 
     const target = e.target as HTMLInputElement
-    const val = this.data.type === 'number' ? +target.value : target.value
+    const val = this.data.type === 'number'
+      ? +target.value
+      : target.value
 
     this.data.setValue(val as typeof this.data['value'])
   }
@@ -35,7 +37,9 @@ export class ControlElement<N extends 'text' | 'number'> extends LitElement {
         .value="${this.data.value}"
         ?readonly="${this.data.readonly}"
         @input="${this.handleInput}"
-        @pointerdown="${(e: MouseEvent) => e.stopPropagation()}"
+        @pointerdown="${(e: MouseEvent) => {
+    e.stopPropagation()
+  }}"
       />
     `
   }

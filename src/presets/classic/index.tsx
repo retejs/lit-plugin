@@ -38,12 +38,10 @@ type ClassicProps<Schemes extends ClassicScheme, K> = {
 /**
  * Classic preset for rendering nodes, connections, controls and sockets.
  */
-export function setup<Schemes extends ClassicScheme, K extends LitArea2D<Schemes>>(
-  props?: ClassicProps<Schemes, K>
-): RenderPreset<Schemes, K> {
+export function setup<Schemes extends ClassicScheme, K extends LitArea2D<Schemes>>(props?: ClassicProps<Schemes, K>): RenderPreset<Schemes, K> {
   const positionWatcher = typeof props?.socketPositionWatcher === 'undefined'
     ? getDOMSocketPosition<Schemes, K>()
-    : props?.socketPositionWatcher
+    : props.socketPositionWatcher
   const { node, connection, socket, control } = props?.customize || {}
 
   customElements.define('rete-connection-wrapper', ConnectionWrapperElement)
@@ -71,8 +69,12 @@ export function setup<Schemes extends ClassicScheme, K extends LitArea2D<Schemes
 
         return {
           data: payload,
-          ...(start ? { start } : {}),
-          ...(end ? { end } : {})
+          ...start
+            ? { start }
+            : {},
+          ...end
+            ? { end }
+            : {}
         }
       }
       return { data: payload }
@@ -81,7 +83,7 @@ export function setup<Schemes extends ClassicScheme, K extends LitArea2D<Schemes
     render(context, plugin) {
       if (context.data.type === 'node') {
         const parent = plugin.parentScope()
-        const emit: RenderEmit<Schemes> = async (data) => parent.emit(data as K | Requires<Schemes>)
+        const emit: RenderEmit<Schemes> = data => void parent.emit(data as K | Requires<Schemes>)
 
         return node
           ? node(context.data)({ emit })
@@ -103,7 +105,8 @@ export function setup<Schemes extends ClassicScheme, K extends LitArea2D<Schemes
           .path=${async (start: Position, end: Position) => {
             type FixImplicitAny = typeof plugin.__scope.produces | undefined
             const response: FixImplicitAny = await plugin.emit({
-              type: 'connectionpath', data: {
+              type: 'connectionpath',
+              data: {
                 payload,
                 points: [start, end]
               }

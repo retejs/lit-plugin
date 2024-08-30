@@ -9,7 +9,9 @@ export function useDrag(translate: Translate, getPointer: GetPointer) {
   const getCurrentPointer = (e: StartEvent) => {
     const pointer = getPointer(e)
 
-    return pointer ? { ...pointer } : null
+    return pointer
+      ? { ...pointer }
+      : null
   }
 
   return {

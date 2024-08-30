@@ -40,21 +40,21 @@ export class Minimap extends LitElement {
         @dblclick="${this.dblclick}"
         data-testid="minimap"
       >
-        ${this.nodes.map((node, index) =>
-    html`<rete-mini-node
+        ${this.nodes.map((node, index) => html`<rete-mini-node
             .left="${this.scale(node.left)}"
             .top="${this.scale(node.top)}"
             .width="${this.scale(node.width)}"
             .height="${this.scale(node.height)}"
             key="${index}_${node.left}"
-          ></rete-mini-node>`
-  )}
+          ></rete-mini-node>`)}
       <rete-mini-viewport
         .left="${this.viewport.left}"
         .top="${this.viewport.top}"
         .width="${this.viewport.width}"
         .height="${this.viewport.height}"
-        .containerWidth="${this.container ? this.container.clientWidth : 0}"
+        .containerWidth="${this.container
+    ? this.container.clientWidth
+    : 0}"
         .onTranslate="${this.onTranslate}"
       ></rete-mini-viewport>
       </div>
@@ -62,7 +62,9 @@ export class Minimap extends LitElement {
   }
 
   scale(value: number): number {
-    return this.container ? value * this.container.clientWidth : 0
+    return this.container
+      ? value * this.container.clientWidth
+      : 0
   }
 
   preventDefault(event: Event) {

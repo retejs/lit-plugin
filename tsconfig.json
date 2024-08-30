@@ -1,9 +1,8 @@
 {
+    "extends": "rete-cli/configs/tsconfig.json",
     "compilerOptions": {
         "target": "ESNext",
         "moduleResolution": "Node",
-        "strict": true,
-        "skipLibCheck": true,
         "jsx": "preserve",
         "experimentalDecorators": true,
         "useDefineForClassFields": true

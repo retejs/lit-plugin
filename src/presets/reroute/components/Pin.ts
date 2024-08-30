@@ -44,7 +44,9 @@ export class Pin extends LitElement {
 
     return html`
       <div
-        class="pin ${this.selected ? 'selected' : ''}"
+        class="pin ${this.selected
+    ? 'selected'
+    : ''}"
         style="${style}"
         @pointerdown="${this.onPointerDown}"
         @contextmenu="${this.onContextMenu}"
