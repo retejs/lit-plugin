@@ -9,6 +9,8 @@ export * as Presets from './presets'
 export type { ClassicScheme, LitArea2D, RenderEmit } from './presets/classic'
 export * from './types'
 
+customElements.define('rete-root', RootElement)
+
 /**
  * Signals that can be emitted by the plugin
  * @priority 9
@@ -37,8 +39,6 @@ export class LitPlugin<Schemes extends BaseSchemes, T = Requires<Schemes>> exten
     super('lit')
 
     this.renderer = getRenderer()
-
-    customElements.define('rete-root', RootElement)
 
     this.addPipe(context => {
       if (!context || typeof context !== 'object' || !('type' in context)) return context

@@ -7,14 +7,14 @@ import { MiniNode } from './components/MiniNode'
 import { MiniViewport } from './components/MiniViewport'
 import { MinimapRender } from './types'
 
+customElements.define('rete-minimap', Minimap)
+customElements.define('rete-mini-node', MiniNode)
+customElements.define('rete-mini-viewport', MiniViewport)
+
 /**
  * Preset for rendering minimap.
  */
 export function setup<Schemes extends BaseSchemes, K extends MinimapRender>(props?: { size?: number }): RenderPreset<Schemes, K> {
-  customElements.define('rete-minimap', Minimap)
-  customElements.define('rete-mini-node', MiniNode)
-  customElements.define('rete-mini-viewport', MiniViewport)
-
   return {
     update(context) {
       if (context.data.type === 'minimap') {
