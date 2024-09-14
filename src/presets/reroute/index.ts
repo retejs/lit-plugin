@@ -7,6 +7,9 @@ import { Pin } from './components/Pin'
 import { Pins } from './components/Pins'
 import { PinsRender } from './types'
 
+customElements.define('rete-pins', Pins)
+customElements.define('rete-pin', Pin)
+
 type Props = {
   translate?: (id: string, dx: number, dy: number) => void
   contextMenu?: (id: string) => void
@@ -17,9 +20,6 @@ type Props = {
  * Preset for rendering pins.
  */
 export function setup<Schemes extends BaseSchemes, K extends PinsRender>(props?: Props): RenderPreset<Schemes, K> {
-  customElements.define('rete-pins', Pins)
-  customElements.define('rete-pin', Pin)
-
   return {
     update(context) {
       if (context.data.type === 'reroute-pins') {

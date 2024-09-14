@@ -8,6 +8,11 @@ import { MenuElement } from './components/Menu'
 import { SearchElement } from './components/Search'
 import { ContextMenuRender } from './types'
 
+customElements.define('rete-context-menu', MenuElement)
+customElements.define('rete-context-menu-block', BlockElement)
+customElements.define('rete-context-menu-search', SearchElement)
+customElements.define('rete-context-menu-item', ItemElement)
+
 /**
  * Preset for rendering context menu.
  */
@@ -15,11 +20,6 @@ export function setup<Schemes extends BaseSchemes, K extends ContextMenuRender>(
   const delay = typeof props?.delay === 'undefined'
     ? 1000
     : props.delay
-
-  customElements.define('rete-context-menu', MenuElement)
-  customElements.define('rete-context-menu-block', BlockElement)
-  customElements.define('rete-context-menu-search', SearchElement)
-  customElements.define('rete-context-menu-item', ItemElement)
 
   return {
     update(context) {

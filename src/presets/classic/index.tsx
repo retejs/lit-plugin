@@ -16,6 +16,13 @@ import { NodeElement } from './components/node'
 import { SocketElement } from './components/socket'
 import { ClassicScheme, ExtractPayload, LitArea2D, RenderEmit } from './types'
 
+customElements.define('rete-connection-wrapper', ConnectionWrapperElement)
+customElements.define('rete-connection', ConnectionElement)
+customElements.define('rete-ref', RefElement)
+customElements.define('rete-socket', SocketElement)
+customElements.define('rete-node', NodeElement)
+customElements.define('rete-control', ControlElement)
+
 export type { ClassicScheme, LitArea2D, RenderEmit } from './types'
 
 type CustomizationProps<Schemes extends ClassicScheme> = {
@@ -43,13 +50,6 @@ export function setup<Schemes extends ClassicScheme, K extends LitArea2D<Schemes
     ? getDOMSocketPosition<Schemes, K>()
     : props.socketPositionWatcher
   const { node, connection, socket, control } = props?.customize || {}
-
-  customElements.define('rete-connection-wrapper', ConnectionWrapperElement)
-  customElements.define('rete-connection', ConnectionElement)
-  customElements.define('rete-ref', RefElement)
-  customElements.define('rete-socket', SocketElement)
-  customElements.define('rete-node', NodeElement)
-  customElements.define('rete-control', ControlElement)
 
   return {
     attach(plugin) {
