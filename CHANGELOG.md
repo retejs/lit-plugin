@@ -1,3 +1,10 @@
+## [2.0.7](https://github.com/retejs/lit-plugin/compare/v2.0.6...v2.0.7) (2024-09-14)
+
+
+### Bug Fixes
+
+* fix NotSupportedError on consequent LitPlugin.constructor & Preset.setup calls ([5a13591](https://github.com/retejs/lit-plugin/commit/5a135911663afa8b65aea99c63a836cbc60d34fb))
+
 ## [2.0.6](https://github.com/retejs/lit-plugin/compare/v2.0.5...v2.0.6) (2024-08-30)
 
 
