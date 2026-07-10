@@ -1,3 +1,10 @@
+## [2.0.8](https://github.com/retejs/lit-plugin/compare/v2.0.7...v2.0.8) (2026-07-10)
+
+
+### Bug Fixes
+
+* set input control text color for dark color-scheme ([3a3c32f](https://github.com/retejs/lit-plugin/commit/3a3c32f60ceb5315f8005b920a8384dd349fb655))
+
 ## [2.0.7](https://github.com/retejs/lit-plugin/compare/v2.0.6...v2.0.7) (2024-09-14)
 
 
