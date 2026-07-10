@@ -10,6 +10,7 @@ export class ControlElement<N extends 'text' | 'number'> extends LitElement {
       width: 100%;
       border-radius: 30px;
       background-color: white;
+      color: black;
       padding: 2px 6px;
       border: 1px solid #999;
       font-size: 110%;
